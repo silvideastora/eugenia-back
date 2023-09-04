@@ -1,5 +1,4 @@
-// invitations.controller.ts
-import {Controller, Post, Body, Get} from '@nestjs/common';
+import {Controller, Post, Body, Get, Headers} from '@nestjs/common';
 import { InvitationsService } from './invitations.service';
 import {CreateInvitationDto} from "../dto/create-invitation";
 import {Invitation} from "../schemas/invitation";
@@ -12,13 +11,15 @@ export class InvitationsController {
 
     @Post()
     @Public()
-    create(@Body() createInvitationDto: CreateInvitationDto) {
-        return this.invitationsService.createInvitation(createInvitationDto);
+    create(@Headers('authorization') authorization: string, @Body() createInvitationDto: CreateInvitationDto) {
+        const token = authorization.replace('Bearer ', '');
+        return this.invitationsService.createInvitation(createInvitationDto, token);
     }
 
     @Get()
     @Public()
-    async findAll(): Promise<Invitation[]> {
-        return this.invitationsService.findAll();
+    async findAll(@Headers('authorization') authorization: string): Promise<Invitation[]> {
+        const token = authorization.replace('Bearer ', '');
+        return this.invitationsService.findAll(token);
     }
 }

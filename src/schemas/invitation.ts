@@ -14,6 +14,9 @@ export class Invitation {
 
     @Prop()
     expirationDate: string;
+
+    @Prop()
+    host: string
 }
 
 export type InvitationDocument = Invitation & Document;

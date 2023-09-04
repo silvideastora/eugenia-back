@@ -1,16 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import {Body, HttpException, HttpStatus, Injectable, ValidationPipe} from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import {User} from "../schemas/users";
 import {CreateUserDto} from "../dto/create-user-dto";
-import { hash } from "bcrypt-ts";
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UsersService {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
-        createUserDto.password = await hash(createUserDto.password, 10)
+    async create(@Body(new ValidationPipe()) createUserDto: CreateUserDto): Promise<User> {
+        let user = await this.userModel.findOne({ email: createUserDto.email }).exec();
+        if (user) {
+            throw new HttpException(
+                'Este email ya esta registrado',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+        user = await this.userModel.findOne({ apartment: createUserDto.apartment }).exec();
+        if (user) {
+            throw new HttpException(
+                'Este apartamento ya esta registrado',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+        createUserDto.password = await bcrypt.hash(createUserDto.password, 10)
         const createdUser = new this.userModel(createUserDto);
         return createdUser.save();
     }
