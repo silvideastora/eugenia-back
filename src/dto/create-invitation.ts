@@ -1,14 +1,18 @@
 // create-invitation.dto.ts
-import { IsString, IsDate, IsNotEmpty } from 'class-validator';
+import {IsString, IsNotEmpty, IsDateString} from 'class-validator';
 
 export class CreateInvitationDto {
     @IsString()
     @IsNotEmpty()
     guestName: string;
 
-    @IsDate()
+    @IsNotEmpty({ message: 'La fecha del evento es obligatoria' })
+    @IsDateString()
     entryDate: Date;
 
-    @IsDate()
+    @IsDateString()
+    @IsNotEmpty({ message: 'La fecha de caducidad del evento es obligatoria' })
     expirationDate: Date;
+
+    host: string
 }

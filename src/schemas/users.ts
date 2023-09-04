@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class User {
     @Prop()
-    username: string;
+    lastName: string;
 
     @Prop()
     password: string;
@@ -14,6 +14,9 @@ export class User {
 
     @Prop()
     name: string;
+
+    @Prop()
+    apartment: number
 }
 
 export type UserDocument = User & Document;

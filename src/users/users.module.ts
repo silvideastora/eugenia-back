@@ -5,6 +5,7 @@ import {MongooseModule} from "@nestjs/mongoose";
 import {User, UserSchema} from "../schemas/users";
 
 @Module({
+  exports: [UsersService],
   providers: [UsersService],
   controllers: [UsersController],
   imports: [
