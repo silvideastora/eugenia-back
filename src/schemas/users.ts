@@ -14,6 +14,9 @@ export class User {
 
     @Prop()
     name: string;
+
+    @Prop()
+    apartmentNumber: number
 }
 
 export type UserDocument = User & Document;
