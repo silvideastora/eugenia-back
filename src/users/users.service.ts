@@ -34,7 +34,22 @@ export class UsersService {
         return this.userModel.findOne({ email }).exec();
     }
 
-    async findAll(): Promise<User[]> {
-        return this.userModel.find().exec();
+    async updatePassword(email: string, password: string) {
+        return this.userModel.updateOne({ email }, {password}).exec();
+    }
+
+    generatePasswordResetToken(): string {
+        const randomPassword = this.generateRandomPassword(8);
+        return randomPassword
+    };
+
+    generateRandomPassword = (length) => {
+        const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let password = '';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            password += charset[randomIndex];
+        }
+        return password;
     }
 }

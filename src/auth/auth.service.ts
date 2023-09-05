@@ -18,7 +18,6 @@ export class AuthService {
                 HttpStatus.BAD_REQUEST,
             );
         }
-        console.log(pass, user.password)
         if (!bcrypt.compareSync(pass, user.password)) {
             throw new HttpException(
                 'Comprueba usuario y contraseña',
@@ -31,10 +30,5 @@ export class AuthService {
                 expiresIn: '1h'
             }),
         };
-    }
-
-    async hashPassword(password: string): Promise<string> {
-        const saltRounds = 10;
-        return bcrypt.hash(password, saltRounds);
     }
 }
