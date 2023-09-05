@@ -1,9 +1,8 @@
-import {Controller, Post, Body, Get, Headers, Res, UnauthorizedException, Query} from '@nestjs/common';
+import {Controller, Post, Body, Get, Headers, UnauthorizedException, Query, Param} from '@nestjs/common';
 import { InvitationsService } from './invitations.service';
 import {CreateInvitationDto} from "../dto/create-invitation";
 import {Invitation} from "../schemas/invitation";
 import {QrCodeService} from "../qr-code/qr-code.service";
-import { Response } from 'express';
 import {JwtService} from "@nestjs/jwt";
 
 @Controller('invitations')
@@ -31,6 +30,11 @@ export class InvitationsController {
         } catch {
             throw new UnauthorizedException();
         }
+    }
+
+    @Get(':id')
+    async findById(@Param() params: any): Promise<Invitation> {
+        return this.invitationsService.findById(params.id);
     }
 
     @Get()

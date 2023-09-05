@@ -29,4 +29,7 @@ export class InvitationsService {
             .exec();
     }
 
+    async findById(_id: string): Promise<Invitation> {
+        return this.invitationRepository.findById(_id)
+    }
 }
