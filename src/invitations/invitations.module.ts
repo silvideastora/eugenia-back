@@ -4,13 +4,15 @@ import { InvitationsController } from './invitations.controller';
 import {MongooseModule} from "@nestjs/mongoose";
 import {Invitation, InvitationSchema} from "../schemas/invitation";
 import {QrCodeModule} from "../qr-code/qr-code.module";
+import {UsersModule} from "../users/users.module";
 
 @Module({
   providers: [InvitationsService],
   controllers: [InvitationsController],
   imports: [
     MongooseModule.forFeature([{ name: Invitation.name, schema: InvitationSchema }]),
-    QrCodeModule
+    QrCodeModule,
+      UsersModule
   ],
 })
 export class InvitationsModule {}
