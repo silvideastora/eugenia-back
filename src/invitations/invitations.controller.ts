@@ -15,14 +15,19 @@ export class InvitationsController {
     ) {}
 
     @Post()
-    async create(@Headers('authorization') authorization: string, @Body() createInvitationDto: CreateInvitationDto,  @Res() res: Response) {
+    async create(@Headers('authorization') authorization: string, @Body() createInvitationDto: CreateInvitationDto) {
         const token = authorization.replace('Bearer ', '');
         try {
             const info = this.jwtService.verify(token);
             const qrCode = await this.qrCodeService.generateQRCode(JSON.stringify(createInvitationDto))
-            await this.invitationsService.createInvitation(createInvitationDto, info.email, qrCode);
-            res.set('Content-Type', 'image/png');
-            res.send(qrCode);
+            const invitation = await this.invitationsService.createInvitation(createInvitationDto, info.email, qrCode);
+            return {
+                qrCode,
+                entryDate: invitation.entryDate,
+                expirationDate: invitation.expirationDate,
+                guestName: invitation.guestName,
+                host: invitation.host
+            }
         } catch {
             throw new UnauthorizedException();
         }
