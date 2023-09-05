@@ -1,9 +1,10 @@
-import {Body, Injectable, ValidationPipe} from '@nestjs/common';
+import {Body, Injectable, UnauthorizedException, ValidationPipe, Res} from '@nestjs/common';
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
 import {Invitation} from "../schemas/invitation";
 import {CreateInvitationDto} from "../dto/create-invitation";
 import {JwtService} from "@nestjs/jwt";
+import {QrCodeService} from "../qr-code/qr-code.service";
 
 
 
@@ -15,17 +16,16 @@ export class InvitationsService {
         private jwtService: JwtService
     ) {}
 
-    async createInvitation(@Body(new ValidationPipe()) createInvitationDto: CreateInvitationDto, token: string): Promise<Invitation> {
-        const email = this.jwtService.verify(token);
-        createInvitationDto.host = email.email;
+    async createInvitation(@Body(new ValidationPipe()) createInvitationDto: CreateInvitationDto, email: string, qrCode: string): Promise<Invitation> {
+        createInvitationDto.host = email;
+        createInvitationDto.qrCode = qrCode;
         const invitation = new this.invitationRepository(createInvitationDto);
         return invitation.save()
+
     }
 
-    async findAll(token: string): Promise<Invitation[]> {
-        const email = this.jwtService.verify(token);
-        console.log(email.email)
-        return this.invitationRepository.find({host: email.email}).exec();
+    async findAll(email: string): Promise<Invitation[]> {
+        return this.invitationRepository.find({host: email}).exec();
     }
 
 }

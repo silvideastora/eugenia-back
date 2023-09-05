@@ -15,4 +15,5 @@ export class CreateInvitationDto {
     expirationDate: Date;
 
     host: string
+    qrCode: string
 }

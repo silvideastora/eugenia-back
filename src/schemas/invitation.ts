@@ -17,6 +17,9 @@ export class Invitation {
 
     @Prop()
     host: string
+
+    @Prop()
+    qrCode: string
 }
 
 export type InvitationDocument = Invitation & Document;
