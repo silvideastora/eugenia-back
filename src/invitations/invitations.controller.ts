@@ -1,4 +1,4 @@
-import {Controller, Post, Body, Get, Headers, Res, UnauthorizedException} from '@nestjs/common';
+import {Controller, Post, Body, Get, Headers, Res, UnauthorizedException, Query} from '@nestjs/common';
 import { InvitationsService } from './invitations.service';
 import {CreateInvitationDto} from "../dto/create-invitation";
 import {Invitation} from "../schemas/invitation";
@@ -29,11 +29,11 @@ export class InvitationsController {
     }
 
     @Get()
-    async findAll(@Headers('authorization') authorization: string): Promise<Invitation[]> {
+    async findAll(@Headers('authorization') authorization: string, @Query() pagination: Record<string, string>): Promise<Invitation[]> {
         const token = authorization.replace('Bearer ', '');
         try {
             const info = this.jwtService.verify(token);
-            return this.invitationsService.findAll(info.email);
+            return this.invitationsService.findAll(info.email, pagination?.page, pagination?.size);
         }  catch {
             throw new UnauthorizedException();
         }
