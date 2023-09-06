@@ -34,7 +34,8 @@ export class UsersService {
         return this.userModel.findOne({ email }).exec();
     }
 
-    async updatePassword(email: string, password: string) {
+    async updatePassword(email: string, _password: string) {
+        let password = bcrypt.hash(_password, 10)
         return this.userModel.updateOne({ email }, {password}).exec();
     }
 
