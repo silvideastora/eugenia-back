@@ -19,13 +19,14 @@ export class InvitationsService {
 
     }
 
-    async findAll(email: string, page: string = '1', limit: string = '10'): Promise<Invitation[]> {
+    async findAll(email: string, page: string = '1', limit: string = '100'): Promise<Invitation[]> {
         const actualPage = parseInt(page);
         const limitPerPage = parseInt(limit) ;
         const skip = (actualPage - 1) * limitPerPage;
         return this.invitationRepository.find({host: email})
             .skip(skip)
             .limit(limitPerPage)
+            .sort({entryDate: -1})
             .exec();
     }
 

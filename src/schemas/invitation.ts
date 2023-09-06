@@ -10,10 +10,10 @@ export class Invitation {
     guestName: string;
 
     @Prop()
-    entryDate: string;
+    entryDate: Date;
 
     @Prop()
-    expirationDate: string;
+    expirationDate: Date;
 
     @Prop()
     host: string
