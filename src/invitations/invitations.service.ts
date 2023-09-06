@@ -33,4 +33,8 @@ export class InvitationsService {
     async findById(_id: string): Promise<Invitation> {
         return this.invitationRepository.findById(_id)
     }
+
+    async deleteInvitationById(id: string): Promise<any> {
+        return this.invitationRepository.findByIdAndRemove(id)
+    }
 }

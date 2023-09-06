@@ -1,11 +1,10 @@
-import {Controller, Post, Body, Get, Headers, UnauthorizedException, Query, Param} from '@nestjs/common';
+import {Controller, Post, Body, Get, Headers, UnauthorizedException, Query, Param, Delete} from '@nestjs/common';
 import { InvitationsService } from './invitations.service';
 import {CreateInvitationDto} from "../dto/create-invitation";
 import {Invitation} from "../schemas/invitation";
 import {QrCodeService} from "../qr-code/qr-code.service";
 import {JwtService} from "@nestjs/jwt";
 import {UsersService} from "../users/users.service";
-import {User} from "../schemas/users";
 
 @Controller('invitations')
 export class InvitationsController {
@@ -59,5 +58,10 @@ export class InvitationsController {
         }  catch {
             throw new UnauthorizedException();
         }
+    }
+
+    @Delete(':id')
+    async deleteById(@Param('id') id: string): Promise<void> {
+        await this.invitationsService.deleteInvitationById(id);
     }
 }
