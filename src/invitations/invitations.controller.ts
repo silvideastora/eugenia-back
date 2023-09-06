@@ -20,14 +20,16 @@ export class InvitationsController {
         const token = authorization.replace('Bearer ', '');
         try {
             const info = this.jwtService.verify(token);
+            const user = await this.userService.findByEmail(info.email);
             const qrCode = await this.qrCodeService.generateQRCode(JSON.stringify(createInvitationDto))
-            const invitation = await this.invitationsService.createInvitation(createInvitationDto, info.email, qrCode);
+            const invitation = await this.invitationsService.createInvitation(createInvitationDto, user, qrCode);
             return {
                 qrCode,
                 entryDate: invitation.entryDate,
                 expirationDate: invitation.expirationDate,
                 guestName: invitation.guestName,
-                host: invitation.host
+                host: invitation.host,
+                apartment: user.apartment
             }
         } catch {
             throw new UnauthorizedException();

@@ -20,6 +20,9 @@ export class Invitation {
 
     @Prop()
     qrCode: string
+
+    @Prop()
+    apartment: number
 }
 
 export type InvitationDocument = Invitation & Document;

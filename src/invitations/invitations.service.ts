@@ -3,6 +3,7 @@ import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
 import {Invitation} from "../schemas/invitation";
 import {CreateInvitationDto} from "../dto/create-invitation";
+import {User} from "../schemas/users";
 
 @Injectable()
 export class InvitationsService {
@@ -11,10 +12,11 @@ export class InvitationsService {
         @InjectModel(Invitation.name) private invitationRepository: Model<Invitation>
     ) {}
 
-    async createInvitation(@Body(new ValidationPipe()) createInvitationDto: CreateInvitationDto, email: string, qrCode: string): Promise<Invitation> {
-        createInvitationDto.host = email;
+    async createInvitation(@Body(new ValidationPipe()) createInvitationDto: CreateInvitationDto, user: User, qrCode: string): Promise<Invitation> {
+        createInvitationDto.host = user.email;
         createInvitationDto.qrCode = qrCode;
         const invitation = new this.invitationRepository(createInvitationDto);
+        invitation.apartment = user.apartment;
         return invitation.save()
 
     }
