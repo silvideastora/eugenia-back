@@ -11,7 +11,7 @@ import { EmailService } from './email/email.service';
 import { EmailModule } from './email/email.module';
 
 @Module({
-  imports: [  MongooseModule.forRoot('mongodb+srv://king:Espartaco321@cluster0.ofypl.mongodb.net/?retryWrites=true&w=majority'),AuthModule, UsersModule, InvitationsModule, QrCodeModule, EmailModule],
+  imports: [  MongooseModule.forRoot(process.env.URL),AuthModule, UsersModule, InvitationsModule, QrCodeModule, EmailModule],
   controllers: [AppController],
   providers: [AppService, QrCodeService, EmailService],
 })
